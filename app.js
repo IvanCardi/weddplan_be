@@ -3,6 +3,8 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const user = require('./routes/user');
+
 
 app.use(morgan('dev')); 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -29,6 +31,17 @@ mongoose.connect('mongodb://localhost/weddplan', {
     console.log('DB connected!')
 })
 .catch(err => console.log(err));
+
+app.get('/', (req, res, next) => {
+    res.status(200).json({
+        res: 'ok'
+    })
+});
+
+app.get('/favicon.ico', (req, res) => res.end());
+
+app.use('/user', user);
+
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
